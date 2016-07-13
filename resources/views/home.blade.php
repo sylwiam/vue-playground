@@ -13,6 +13,7 @@
 				<h3>Vue Projects:</h3>
 				<ol class="list-group">
 					<li class="list-group-item">
+                        <a href="{{URL::to('tasks')}}">Task Manager</a>
 					</li>
 					<li class="list-group-item">
 					</li>
