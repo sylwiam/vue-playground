@@ -45,9 +45,9 @@
 					</ol>
 					<button v-on="click: clearCompleted" class="btn btn-danger">Clear Completed</button>
 				</div>
-				<div>
+<!-- 				<div>
 					<pre>@{{ $data | json}}</pre>
-				</div>
+				</div> -->
 			</div>
 		</div>	
 		<script type="text/javascript"  src="{{ URL::asset('js/tasks.js') }}"></script>
