@@ -1,12 +1,15 @@
 new Vue({
 	el: '#tasks',
 	data: {
+		// test Task data:
 		tasks: [
 			{ name: 'Fix mongo server', completed: false },
-			{ name: 'hotfix for checksystem', completed: false },
-			{ name: 'have some chocolate', completed: false },
-			{ name: 'have some MORE chocolate', completed: false },
-			{ name: 'Make Deniz do some work ;)', completed: false }
+			{ name: 'Hotfix for checksystem', completed: false },
+			{ name: 'Attend scrum meeting', completed: false },
+			{ name: 'Have some chocolate', completed: false },
+			{ name: 'Do sprint planning with the team', completed: false },
+			{ name: 'Have some MORE chocolate', completed: false },
+			
 		],
 		newTask: ''
 
@@ -88,7 +91,6 @@ new Vue({
 			});
 
 			this.newTask = '';
-
 
 		},
 		removeTask: function(task) {
