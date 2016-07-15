@@ -1,3 +1,4 @@
+console.log('hello');
 new Vue({
 	el: '#tasks',
 	data: {
@@ -15,7 +16,7 @@ new Vue({
 
 	},
 	ready : function() {       
-		console.log('vueModel is ready');		   
+		console.log('vueModel is ready');   
 		this.fetchTasks();
     },
 	computed: {
@@ -42,7 +43,7 @@ new Vue({
 			console.log('fetchTasks');
 
 			$.ajax({
-				url: 'api/tasks',
+				url: 'task/get-all',
 				type: 'get',
 				async: false,
 				success: function(responseData) {
@@ -53,12 +54,14 @@ new Vue({
 				}
 			});
 
-			// if (typeof temp !== 'undefined') {
-			// 	this.$set('tasks', temp);
+			if (typeof temp !== 'undefined') {
+				this.fixBoolData(temp);
+				console.log('tasks New');
+				this.$set('tasks', temp);
 				
-			// 	console.log('tasks New');
-			// 	console.log(this.tasks);
-			// }
+				console.log('tasks New');
+				console.log(this.tasks);
+			}
 
 		},
 		addTask: function(e) {
@@ -66,14 +69,9 @@ new Vue({
 
 			if (! this.newTask) return;
 
-			this.tasks.push({
-				body: this.newTask, 
-				completed: false
-			});
-
 			// inputData = this.newTask;
 			inputData = {
-				name: 'Do Something',
+				name: this.newTask,
 				completed: false
 			}
 			console.log('inputData:');
@@ -81,7 +79,7 @@ new Vue({
 
 			// jQuery ajax
 			$.ajax({
-				url: 'api/tasks/create',
+				url: 'task/create',
 				type: 'post',
 				data: inputData,
 				async: false,
@@ -90,15 +88,38 @@ new Vue({
 				}
 			});
 
+			this.fetchTasks();
+			
 			this.newTask = '';
 
 		},
 		removeTask: function(task) {
-			this.tasks.$remove(task);
+			console.log('removeTask()');
+			// this.tasks.$remove(task);
+
+			inputData = {
+				name: task.name,
+			}
+			console.log('inputData:');
+			console.log(inputData);
+
+			// jQuery ajax
+			$.ajax({
+				url: 'task/delete',
+				type: 'post',
+				data: inputData,
+				async: false,
+				success: function(responseData) {
+					// 
+				}
+			});
+
+			this.fetchTasks();
+
 		},
 		editTask: function(task) {
 			this.removeTask(task);
-			this.newTask = task.body;
+			this.newTask = task.name;
 			this.$$.newTaskEl.focus();
 		},
 		toglleTaskCompletions: function(task) {
@@ -113,7 +134,16 @@ new Vue({
 			this.tasks = this.tasks.filter(function(task) {
 				return ! task.completed;
 			});
-		}
+		},
+		fixBoolData: function(tasks) {
+			return tasks.forEach(function(task) {
+				if (task.completed == "false" || task.completed == "0") {
+					task.completed = false;
+				} else if (task.completed == "true" || task.completed == "1") {
+					task.completed = true;
+				}
+			});
+		},
  
 	}
 })
