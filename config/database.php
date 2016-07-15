@@ -64,6 +64,18 @@ return [
             'strict'    => false,
         ],
 
+        'mysql_laravel' => [
+            'driver'    => 'mysql',
+            'host'      => env('LARAVELDB_HOST', 'localhost'),
+            'database'  => env('LARAVELDB_DATABASE', ''),
+            'username'  => env('LARAVELDB_USERNAME', ''),
+            'password'  => env('LARAVELDB_PASSWORD', ''),
+            'charset'   => 'utf8',
+            'collation' => 'utf8_unicode_ci',
+            'prefix'    => '',
+            'strict'    => false,
+        ],
+
         'pgsql' => [
             'driver'   => 'pgsql',
             'host'     => env('DB_HOST', 'localhost'),
