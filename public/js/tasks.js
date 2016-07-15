@@ -2,21 +2,11 @@ console.log('hello');
 new Vue({
 	el: '#tasks',
 	data: {
-		// test Task data:
-		tasks: [
-			{ name: 'Fix mongo server', completed: false },
-			{ name: 'Hotfix for checksystem', completed: false },
-			{ name: 'Attend scrum meeting', completed: false },
-			{ name: 'Have some chocolate', completed: false },
-			{ name: 'Do sprint planning with the team', completed: false },
-			{ name: 'Have some MORE chocolate', completed: false },
-			
-		],
+		tasks: [],
 		newTask: ''
 
 	},
-	ready : function() {       
-		console.log('vueModel is ready');   
+	ready : function() {  
 		this.fetchTasks();
     },
 	computed: {
@@ -40,8 +30,6 @@ new Vue({
 	},
 	methods: {
 		fetchTasks: function () {
-			console.log('fetchTasks');
-
 			$.ajax({
 				url: 'task/get-all',
 				type: 'get',
@@ -55,11 +43,16 @@ new Vue({
 			});
 
 			if (typeof temp !== 'undefined') {
+				
+				this.$set('tasks', temp);
+
+				console.log('tasks before fix');
+				console.log(this.tasks);
+				
 				this.fixBoolData(temp);
-				console.log('tasks New');
 				this.$set('tasks', temp);
 				
-				console.log('tasks New');
+				console.log('tasks after fix');
 				console.log(this.tasks);
 			}
 
@@ -69,7 +62,6 @@ new Vue({
 
 			if (! this.newTask) return;
 
-			// inputData = this.newTask;
 			inputData = {
 				name: this.newTask,
 				completed: false
@@ -77,45 +69,21 @@ new Vue({
 			console.log('inputData:');
 			console.log(inputData);
 
-			// jQuery ajax
-			$.ajax({
-				url: 'task/create',
-				type: 'post',
-				data: inputData,
-				async: false,
-				success: function(responseData) {
-					// 
-				}
-			});
-
+			this.sendAjaxPost('task/create', inputData);
 			this.fetchTasks();
 			
 			this.newTask = '';
 
 		},
 		removeTask: function(task) {
-			console.log('removeTask()');
-			// this.tasks.$remove(task);
-
 			inputData = {
 				name: task.name,
 			}
 			console.log('inputData:');
 			console.log(inputData);
 
-			// jQuery ajax
-			$.ajax({
-				url: 'task/delete',
-				type: 'post',
-				data: inputData,
-				async: false,
-				success: function(responseData) {
-					// 
-				}
-			});
-
+			this.sendAjaxPost('task/delete', inputData);
 			this.fetchTasks();
-
 		},
 		editTask: function(task) {
 			this.removeTask(task);
@@ -124,6 +92,14 @@ new Vue({
 		},
 		toglleTaskCompletions: function(task) {
 			task.completed = ! task.completed;
+
+			inputData = {
+				name: task.name,
+				completed: task.completed
+			}
+
+			this.sendAjaxPost('task/update', inputData);
+			this.fetchTasks();
 		},
 		completeAll: function(task) {
 			return this.tasks.forEach(function(task) {
@@ -144,6 +120,17 @@ new Vue({
 				}
 			});
 		},
- 
+ 		sendAjaxPost: function(ajaxUrl, inputData) {
+ 			// jQuery ajax
+			$.ajax({
+				url: ajaxUrl,
+				type: 'post',
+				data: inputData,
+				async: false,
+				success: function(responseData) {
+					// 
+				}
+			});
+ 		}
 	}
 })

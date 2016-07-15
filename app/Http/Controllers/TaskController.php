@@ -2,7 +2,7 @@
 
 use App\Models\Task;
 use Illuminate\Http\Request;
-
+use Illuminate\Http\Response
 class TaskController extends Controller {
 
 	public function getData() {
@@ -26,14 +26,16 @@ class TaskController extends Controller {
 		\Log::info('all requests');
 		\Log::info($request->all());
 
-        $data['name'] = $request->get('name');
-        $data['completed'] = $request->get('completed');
-        
-        // $data['name'] = 'task 4';
-        // $data['completed'] = false;
+		$name = $request->get('name');
+		$completed = $request->get('completed');
+		
+		$completed = ($completed === 'true') ? true: false;
 
-		// \Log::info('data hardcoded:');
-		// \Log::info($data);
+        $data['name'] = $name;
+        $data['completed'] = $completed;
+
+		\Log::info('data after:');
+		\Log::info($data);
 
 		$message = new Task;
 		$message->fill($data);
@@ -41,13 +43,31 @@ class TaskController extends Controller {
 		$result = $message->save();
 	}
 
-	public function edit(Request $request) {
+	public function update(Request $request) {
 		$name = $request->get('name');
+		$completed = $request->get('completed');
+		$completed = ($completed === 'true') ? true: false;
+
+		$data = array();
+
 		$task = Task::findByName($name);
+
+		\Log::info('task');
+		\Log::info($task);
+
+		$data['name'] = $name;
+        $data['completed'] = $completed;
 
 		$task->fill($data);
 
-		$result = $task->save();		
+		$result = $task->save();	
+
+
+		$task1 = Task::findByName($name);
+
+		\Log::info('task after');
+		\Log::info($task1);
+	
 	}
 
 	public function delete(Request $request) {

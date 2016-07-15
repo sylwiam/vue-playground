@@ -12,7 +12,7 @@
 	</head>
 	<body>
 		<div class="container">
-			<div id="tasks">
+			<div id="tasks" class="col-md-6">
 				<div v-show="remaining.length">
 					<h1>To-Do (@{{remaining.length}})</h1>
 					<ol class="list-group">

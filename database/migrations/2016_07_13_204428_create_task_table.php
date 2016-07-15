@@ -1,4 +1,4 @@
-<?php
+n<?php
 
 use Illuminate\Database\Schema\Blueprint;
 use Illuminate\Database\Migrations\Migration;
@@ -28,6 +28,7 @@ class CreateTaskTable extends Migration
      */
     public function down()
     {
-        //
+        // Schema::drop('task');
     }
 }
+
